@@ -1,0 +1,35 @@
+load('ext://helm_resource', 'helm_repo', 'helm_resource')
+
+helm_resource('tuppr',
+  'oci://ghcr.io/home-operations/charts/tuppr',
+  namespace = 'system-upgrade',
+  flags = [
+    '--create-namespace',
+    '--version=0.1.26',
+  ],
+  resource_deps=['Fake Objects']
+)
+
+k8s_resource(
+  new_name = 'K8S Upgrade',
+  objects = [
+    "workers-west:TalosUpgrade:default",
+    "workers-east:TalosUpgrade:default",
+    "kubernetes:KubernetesUpgrade:default",
+  ],
+)
+k8s_resource(
+  new_name = 'Fake Objects',
+  objects = [
+    'serviceaccounts.talos.dev:CustomResourceDefinition:default',
+    'tuppr-talosconfig:Secret:system-upgrade'
+  ],
+)
+
+k8s_yaml(kustomize('./'))
+
+k8s_resource(
+  workload = 'tuppr-dashboard',
+  labels = ['Dashboard'],
+  port_forwards = ['8080:8080'],
+)

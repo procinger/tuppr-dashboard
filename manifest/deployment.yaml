@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tuppr-dashboard
+  labels:
+    app.kubernetes.io/name: tuppr-dashboard
+    app.kubernetes.io/instance: tuppr-dashboard
+    #app.kubernetes.io/version: "x.x.x"
+    app.kubernetes.io/managed-by: Kustomize
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: tuppr-dashboard
+      app.kubernetes.io/instance: tuppr-dashboard
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: tuppr-dashboard
+        app.kubernetes.io/instance: tuppr-dashboard
+    spec:
+      serviceAccountName: tuppr-dashboard
+      containers:
+        - name: dashboard
+          image: ghcr.io/procinger/tuppr-dashboard/tuppr
+          ports:
+            - containerPort: 8080
+              name: dashboard
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            runAsUser: 65532
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "64Mi"
+              cpu: "100m"
+          livenessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: dashboard
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              scheme: HTTP
+              path: /health
+              port: dashboard
+            periodSeconds: 15

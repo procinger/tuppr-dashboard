@@ -1,0 +1,29 @@
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: TalosUpgrade
+metadata:
+  name: workers-west
+spec:
+  talos:
+    version: v1.12.4
+  nodeSelector:
+    matchLabels:
+      topology.kubernetes.io/zone: west
+---
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: TalosUpgrade
+metadata:
+  name: workers-east
+spec:
+  talos:
+    version: v1.12.4
+  nodeSelector:
+    matchLabels:
+---
+apiVersion: tuppr.home-operations.com/v1alpha1
+kind: KubernetesUpgrade
+metadata:
+  name: kubernetes
+spec:
+  kubernetes:
+    version: v1.34.3
+

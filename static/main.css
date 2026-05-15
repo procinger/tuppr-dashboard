@@ -1,0 +1,81 @@
+body {
+    background: #f6f8fb;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.dashboard-card {
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: 0 0.75rem 2rem rgba(20, 30, 50, 0.08);
+}
+
+.status-dot {
+    width: 0.75rem;
+    height: 0.75rem;
+    display: inline-block;
+    border-radius: 50%;
+    margin-right: 0.4rem;
+}
+
+.status-ready,
+.status-completed {
+    background: #198754;
+}
+
+.status-running,
+.status-progress,
+.status-healthchecking {
+    background: #0d6efd;
+}
+
+.status-warning {
+    background: #ffc107;
+}
+
+.status-error,
+.status-failed,
+.status-notready {
+    background: #dc3545;
+}
+
+.status-unknown {
+    background: #6c757d;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.metric-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.mono {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.small-muted {
+    color: #6c757d;
+    font-size: 0.875rem;
+}
+
+.refresh-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
