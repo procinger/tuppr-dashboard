@@ -1,0 +1,44 @@
+name: Validate Infrastructure
+
+on:
+  pull_request:
+  merge_group:
+  push:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: test infrastructure
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install K8S tooling
+        uses: yokawasa/action-setup-kube-tools@v0.13.1
+        with:
+          setup-tools: |
+            kubectl
+            kustomize
+            helm
+            tilt
+          kubectl: '1.36.1'
+          kustomize: '5.8.1'
+          helm: '4.1.3'
+          tilt: '0.37.3'
+
+      - name: Create KinD Cluster
+        run: ${{ github.workspace }}/local-dev/kind-with-registry.sh
+
+      - name: Run Tilt CI
+        run: tilt ci
+
+      - name: Upload KinD logs
+        if: always()
+        uses: actions/upload-artifact@v5.0.0
+        with:
+          name: kind
+          path: '${{ github.workspace }}/kind-logs'
+          retention-days: 3
