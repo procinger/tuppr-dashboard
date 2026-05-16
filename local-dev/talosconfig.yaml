@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: tuppr-talosconfig
-  namespace: system-upgrade
+  namespace: default
 type: Opaque
 stringData:
   config: |

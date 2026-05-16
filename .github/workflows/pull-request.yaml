@@ -1,4 +1,4 @@
-name: Validate Infrastructure
+name: Run CI Test
 
 on:
   pull_request:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    name: test infrastructure
+    name: Run CI Test
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -34,6 +34,41 @@ jobs:
 
       - name: Run Tilt CI
         run: tilt ci
+
+      - name: Start port-forward
+        run: |
+          kubectl port-forward \
+            deployment/tuppr-dashboard \
+            8080:8080 \
+            -n default \
+            > portforward.log 2>&1 &
+
+          echo $! > portforward.pid
+
+      - name: Wait for port-forward
+        run: |
+          for i in $(seq 1 30); do
+            if nc -z 127.0.0.1 8080; then
+              echo "port-forward ready"
+              exit 0
+            fi
+
+            sleep 2
+          done
+
+          echo "port-forward failed"
+          cat portforward.log
+          exit 1
+
+      - name: Run curl tests
+        run: |
+          curl -v http://127.0.0.1:8080/nodes | jq
+          curl -v http://127.0.0.1:8080/tuppr/talos | jq
+          curl -v http://127.0.0.1:8080/tuppr/kubernetes | jq
+          
+
+      - name: Export KinD logs
+        run: kind export logs ${{ github.workspace }}/kind-logs
 
       - name: Upload KinD logs
         if: always()
