@@ -13,8 +13,7 @@ COPY internal internal
 RUN --mount=type=cache,target=/vendor go mod download
 RUN --mount=type=cache,target=/root/.cache GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags="-w -s" -o dashboard
 
-####### api
-
+####### Dashboard
 FROM scratch
 
 WORKDIR /

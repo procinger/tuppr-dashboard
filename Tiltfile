@@ -16,7 +16,7 @@ docker_prune_settings(
 include('./local-dev/Tiltfile')
 
 docker_build(
-  ref = 'localhost:5001/tupper-dashboard/dashboard',
+  ref = 'localhost:5001/tuppr-dashboard/dashboard',
   context = '.',
   dockerfile = 'Containerfile',
 )
