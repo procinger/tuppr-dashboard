@@ -6,4 +6,4 @@ resources:
 
 images:
   - name: ghcr.io/procinger/tuppr-dashboard/tuppr
-    newName: localhost:5001/tupper-dashboard/dashboard
+    newName: localhost:5001/tuppr-dashboard/dashboard

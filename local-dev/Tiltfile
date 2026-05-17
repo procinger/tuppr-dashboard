@@ -14,13 +14,16 @@ k8s_resource(
   ],
 )
 
+# renovate: datasource=github-releases depName=home-operations/tuppr
+TUPPR_VERSION = '0.1.26'
+
 load('ext://helm_resource', 'helm_repo', 'helm_resource')
 helm_resource('tuppr',
   'oci://ghcr.io/home-operations/charts/tuppr',
   namespace = 'default',
   flags = [
     '--create-namespace',
-    '--version=0.1.26',
+   '--version=' + TUPPR_VERSION,
   ],
   resource_deps = [
     'serviceaccounts.talos.dev',
