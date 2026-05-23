@@ -51,13 +51,29 @@ jobs:
       contents: write
 
     steps:
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          client-id: ${{ secrets.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          permission-contents: write
+
       - uses: actions/checkout@v6
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+          ref: ${{ github.head_ref }}
+          persist-credentials: false
 
       - name: Update Kubernetes manifest
         run: |
+          export VERSION="${{ github.event.inputs.tag }}"
           export IMAGE="ghcr.io/procinger/tuppr-dashboard/dashboard:${{ github.event.inputs.tag }}"
+          
           yq -i '.spec.template.spec.containers[] |=
           select(.name == "dashboard").image = strenv(IMAGE)' manifest/deployment.yaml
+          
+          yq -i '.metadata.labels."app.kubernetes.io/version" = strenv(VERSION)' manifest/deployment.yaml
+          
           cat manifest/deployment.yaml
 
       - name: Commit updated manifest
@@ -79,5 +95,5 @@ jobs:
         uses: softprops/action-gh-release@v3.0.0
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          files: |
-            manifest/deployment.yaml
+          #files: |
+          #  manifest/deployment.yaml
