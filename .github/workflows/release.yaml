@@ -76,9 +76,9 @@ jobs:
           export IMAGE="ghcr.io/procinger/tuppr-dashboard/dashboard:${{ github.event.inputs.tag }}"
           
           yq -i '.spec.template.spec.containers[] |=
-          select(.name == "dashboard").image = strenv(IMAGE)' manifest/deployment.yaml
+          select(.name == "dashboard").image = strenv(IMAGE)' ${{ github.workspace }}/manifest/deployment.yaml
           
-          yq -i '.metadata.labels."app.kubernetes.io/version" = strenv(VERSION)' manifest/deployment.yaml
+          yq -i '.metadata.labels."app.kubernetes.io/version" = strenv(VERSION)' ${{ github.workspace }}/manifest/deployment.yaml
           
           cat manifest/deployment.yaml
 
@@ -92,6 +92,19 @@ jobs:
           git commit -m "chore: update image to ${{ github.event.inputs.tag }}" || exit 0
           git push origin HEAD:main
 
+      - name: Install K8S tooling
+        uses: yokawasa/action-setup-kube-tools@v0.13.5
+        with:
+          setup-tools: |
+            kubectl
+            kustomize
+          kubectl: '1.36.1'
+          kustomize: '5.8.1'
+
+      - name: Render Manifest
+        run: |
+          kubectl kustomize ${{ github.workspace }}/manifest > ${{ github.workspace }}/dashboard.yaml
+
       - name: Create Git Tag
         run: |
           git tag ${{ github.event.inputs.tag }}
@@ -101,6 +114,5 @@ jobs:
         uses: softprops/action-gh-release@v3.0.0
         with:
           tag_name: ${{ github.event.inputs.tag }}
-          #files: |
-          #  manifest/deployment.yaml
-
+          files: |
+            ${{ github.workspace }}/dashboard.yaml
