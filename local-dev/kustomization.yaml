@@ -5,5 +5,5 @@ resources:
   - ../manifest/
 
 images:
-  - name: ghcr.io/procinger/tuppr-dashboard/tuppr
+  - name: ghcr.io/procinger/tuppr-dashboard/dashboard
     newName: localhost:5001/tuppr-dashboard/dashboard
