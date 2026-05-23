@@ -4,6 +4,8 @@ kind: Kustomization
 resources:
   - ../manifest/
 
+namespace: default
+
 images:
   - name: ghcr.io/procinger/tuppr-dashboard/dashboard
     newName: localhost:5001/tuppr-dashboard/dashboard

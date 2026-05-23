@@ -31,19 +31,6 @@ helm_resource('tuppr',
   ]
 )
 
-#k8s_yaml('tuppr-upgrade.yaml')
-#k8s_resource(
-#  new_name = 'tuppr-upgrade',
-#  objects = [
-#    "workers-west:TalosUpgrade:default",
-#    "workers-east:TalosUpgrade:default",
-#    "kubernetes:KubernetesUpgrade:default",
-#  ],
-#  resource_deps = [
-#    'tuppr'
-#  ]
-#)
-
 local_resource(
   'tuppr-upgrade',
   cmd='''
@@ -70,6 +57,7 @@ k8s_resource(
   labels = ['Dashboard'],
   port_forwards = ['8080:8080'],
   resource_deps = [
-    'tuppr-upgrade'
+    'tuppr-upgrade',
+    'tuppr',
   ]
 )
