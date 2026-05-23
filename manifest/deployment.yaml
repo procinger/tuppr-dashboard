@@ -23,7 +23,7 @@ spec:
       serviceAccountName: tuppr-dashboard
       containers:
         - name: dashboard
-          image: ghcr.io/procinger/tuppr-dashboard/tuppr
+          image: ghcr.io/procinger/tuppr-dashboard/dashboard
           ports:
             - containerPort: 8080
               name: dashboard
