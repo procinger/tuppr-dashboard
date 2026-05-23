@@ -67,8 +67,8 @@ jobs:
       - uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
-          ref: ${{ github.head_ref }}
-          persist-credentials: false
+          ref: main
+          persist-credentials: true
 
       - name: Update Kubernetes manifest
         run: |
@@ -90,7 +90,7 @@ jobs:
           git pull origin main
           git add manifest/deployment.yaml
           git commit -m "chore: update image to ${{ github.event.inputs.tag }}" || exit 0
-          git push
+          git push origin HEAD:main
 
       - name: Create Git Tag
         run: |
