@@ -58,12 +58,14 @@ jobs:
           export IMAGE="ghcr.io/procinger/tuppr-dashboard/dashboard:${{ github.event.inputs.tag }}"
           yq -i '.spec.template.spec.containers[] |=
           select(.name == "dashboard").image = strenv(IMAGE)' manifest/deployment.yaml
+          cat manifest/deployment.yaml
 
       - name: Commit updated manifest
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           
+          git pull origin main
           git add manifest/deployment.yaml
           git commit -m "chore: update image to ${{ github.event.inputs.tag }}" || exit 0
           git push
