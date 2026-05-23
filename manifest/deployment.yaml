@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: tuppr-dashboard
     app.kubernetes.io/instance: tuppr-dashboard
-    app.kubernetes.io/version: "v0.0.6"
+    app.kubernetes.io/version: "v0.0.7"
     app.kubernetes.io/managed-by: Kustomize
 spec:
   replicas: 1
@@ -24,7 +24,7 @@ spec:
       serviceAccountName: tuppr-dashboard
       containers:
         - name: dashboard
-          image: ghcr.io/procinger/tuppr-dashboard/dashboard:v0.0.6
+          image: ghcr.io/procinger/tuppr-dashboard/dashboard:v0.0.7
           ports:
             - containerPort: 8080
               name: dashboard
@@ -62,7 +62,7 @@ metadata:
   name: tuppr-dashboard
   namespace: system-upgrade
   labels:
-    app.kubernetes.io/version: v0.0.6
+    app.kubernetes.io/version: v0.0.7
 spec:
   type: ClusterIP
   ports:
