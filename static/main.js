@@ -49,21 +49,56 @@ function renderNodes(nodes) {
         return;
     }
 
-    const rows = nodes.map(node => {
+    const rows = nodes.map((node) => {
         const readyLabel = node.status === true ? 'Ready' : 'Not Ready';
         const readyClass = node.status === true ? 'text-success' : 'text-danger';
 
+        const labels = node.labels || {};
+
+        const hiddenPrefixes = [
+
+        ];
+
+        const hiddenExact = [
+
+        ];
+
+        const visibleLabels = Object.entries(labels)
+            .filter(([key]) => {
+                if (hiddenExact.includes(key)) return false;
+                return !hiddenPrefixes.some(prefix => key.startsWith(prefix));
+            });
+
+        const labelsHtml = visibleLabels.length
+            ? visibleLabels.map(([key, value]) => {
+                const shortKey = key
+                    .replace('node-role.kubernetes.io/', '')
+                    .replace('kubernetes.io/', '');
+
+                return `
+                <span class="node-label-pill">
+                    ${escapeHtml(shortKey)}${value ? `=${escapeHtml(value)}` : ''}
+                </span>
+            `;
+            }).join('')
+            : '<span class="text-muted small">No labels</span>';
+
         return `
-          <tr>
-            <td class="fw-semibold mono">${escapeHtml(node.name)}</td>
+        <tr>
+            <td style="min-width: 340px;">
+                <div class="fw-semibold mono">${escapeHtml(node.name)}</div>
+                <div class="node-labels mt-1">
+                    ${labelsHtml}
+                </div>
+            </td>
             <td><span class="${readyClass}">${phaseBadge(readyLabel)}</span></td>
             <td><span class="badge text-bg-secondary">${escapeHtml(node.roles || 'unknown')}</span></td>
             <td class="mono">${escapeHtml(node.version || '-')}</td>
             <td class="mono small">${escapeHtml(node.os_image || '-')}</td>
             <td class="mono small">${escapeHtml(node.kernel || '-')}</td>
             <td class="mono small">${escapeHtml(node.runtime || '-')}</td>
-          </tr>
-        `;
+        </tr>
+    `;
     }).join('');
 
     $('#nodesTable').html(rows);
@@ -95,7 +130,7 @@ function renderKubernetesUpgrade(data) {
               <td>${formatDate(entry.completedAt)}</td>
             </tr>
           `).join('')
-        : '<tr><td colspan="4" class="text-muted">No hisHistoryilable.</td></tr>';
+        : '<tr><td colspan="4" class="text-muted">No History Available.</td></tr>';
 
     $('#kubernetesUpgradeBox').html(`
         <div class="mb-3">
@@ -174,7 +209,7 @@ function renderTalosUpgrades(data) {
                 <td>${formatDate(entry.completedAt)}</td>
               </tr>
             `).join('')
-            : '<tr><td colspan="4" class="text-muted">No hisHistoryilable.</td></tr>';
+            : '<tr><td colspan="4" class="text-muted">No History Available.</td></tr>';
 
         return `
           <div class="border rounded-4 p-3 mb-3 bg-white">
