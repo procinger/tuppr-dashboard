@@ -33,6 +33,7 @@ func (s *svc) ListNodes(ctx context.Context) ([]types.Node, error) {
 			OSImage: node.Status.NodeInfo.OSImage,
 			Kernel:  node.Status.NodeInfo.KernelVersion,
 			Runtime: node.Status.NodeInfo.ContainerRuntimeVersion,
+			Labels:  node.Labels,
 		}
 		nodesList = append(nodesList, n)
 	}

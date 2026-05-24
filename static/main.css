@@ -75,6 +75,24 @@ body {
     animation: spin 1s linear infinite;
 }
 
+.node-labels {
+    line-height: 1.6;
+}
+
+.node-label-pill {
+    display: inline-block;
+    padding: 0.12rem 0.42rem;
+    margin-right: 0.25rem;
+    margin-bottom: 0.15rem;
+    border-radius: 999px;
+    background: #f1f3f5;
+    color: #6c757d;
+    font-size: 0.60rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    border: 1px solid #e2e6ea;
+    white-space: nowrap;
+}
+
 @keyframes spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
