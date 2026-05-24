@@ -86,10 +86,9 @@ function renderNodes(nodes) {
         return `
         <tr>
             <td style="min-width: 340px;">
-                <div class="fw-semibold mono">${escapeHtml(node.name)}</div>
-                <div class="node-labels mt-1">
-                    ${labelsHtml}
-                </div>
+                ${escapeHtml(node.name)}
+                <!-- div class="fw-semibold mono">${escapeHtml(node.name)}</div -->
+                <!-- div class="node-labels mt-1">${labelsHtml}</div-->
             </td>
             <td><span class="${readyClass}">${phaseBadge(readyLabel)}</span></td>
             <td><span class="badge text-bg-secondary">${escapeHtml(node.roles || 'unknown')}</span></td>
