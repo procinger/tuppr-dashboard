@@ -15,7 +15,7 @@ k8s_resource(
 )
 
 # renovate: datasource=github-releases depName=home-operations/tuppr
-TUPPR_VERSION = '0.2.4'
+TUPPR_VERSION = '0.2.6'
 
 load('ext://helm_resource', 'helm_repo', 'helm_resource')
 helm_resource('tuppr',
