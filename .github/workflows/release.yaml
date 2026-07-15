@@ -93,7 +93,7 @@ jobs:
           git push origin HEAD:main
 
       - name: Install K8S tooling
-        uses: yokawasa/action-setup-kube-tools@v0.13.5
+        uses: yokawasa/action-setup-kube-tools@v0.14.0
         with:
           setup-tools: |
             kubectl
